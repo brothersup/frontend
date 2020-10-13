@@ -25,7 +25,6 @@ export const initialState = {
   email: '',
   availableId: false,
   availableName: false,
-  result: false,
 };
 
 const signupReducer = (state = initialState, action) =>
@@ -36,7 +35,6 @@ const signupReducer = (state = initialState, action) =>
         draft.formData = action.formData;
         break;
       case SEND_FORM_SUCCESS:
-        draft.result = action.result;
         draft.loading = false;
         break;
       case SEND_FORM_ERROR:

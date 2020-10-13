@@ -12,6 +12,7 @@ router.post('/signup', (req, res) => {
   pool.query(
     `INSERT INTO user(id, password, name, email) VALUES('${id}', '${encryptedPassword}', '${name}', '${email}')`,
     (error, results, fields) => {
+      // TODO: error 처리 해야됨.
       if (error) throw error;
       return res.json({ result: true });
     },

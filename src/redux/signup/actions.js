@@ -21,10 +21,9 @@ export function sendFormAction(formData) {
   };
 }
 
-export function sendFormSuccessAction(result) {
+export function sendFormSuccessAction() {
   return {
     type: SEND_FORM_SUCCESS,
-    result,
   };
 }
 

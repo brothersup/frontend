@@ -1,5 +1,5 @@
 import { call, select, put, all, takeLatest } from 'redux-saga/effects';
-import { Router } from 'next/router';
+import Router from 'next/router';
 import { SEND_FORM, CHECK_ID, CHECK_NAME } from './constants';
 import {
   sendFormSuccessAction,
@@ -17,7 +17,12 @@ function* sendForm() {
 
   try {
     const res = yield call(sendFormRequest, formData);
-    yield put(sendFormSuccessAction(res.data.result));
+    yield put(sendFormSuccessAction());
+
+    if (res.data.result) {
+      alert('가입이 완료되었습니다!');
+      yield call(Router.push, '/');
+    }
   } catch (error) {
     yield put(sendFormErrorAction(error));
   }
@@ -46,7 +51,11 @@ function* checkName() {
 }
 
 function* signupSaga() {
-  yield all([takeLatest(SEND_FORM, sendForm), takeLatest(CHECK_ID, checkId), takeLatest(CHECK_NAME, checkName)]);
+  yield all([
+    takeLatest(SEND_FORM, sendForm),
+    takeLatest(CHECK_ID, checkId),
+    takeLatest(CHECK_NAME, checkName),
+  ]);
 }
 
 export default signupSaga;

@@ -4,7 +4,6 @@ import { initialState } from './reducer';
 const selectSignup = state => state.signup || initialState;
 
 const makeSelectFormData = () => createSelector(selectSignup, signupState => signupState.formData);
-const makeSelectResult = () => createSelector(selectSignup, signupState => signupState.result);
 const makeSelectLoading = () => createSelector(selectSignup, signupState => signupState.loading);
 const makeSelectError = () => createSelector(selectSignup, signupState => signupState.error);
 const makeSelectId = () => createSelector(selectSignup, signupState => signupState.id);
@@ -16,7 +15,6 @@ const makeSelectAvailableName = () => createSelector(selectSignup, signupState =
 
 export {
   makeSelectFormData,
-  makeSelectResult,
   makeSelectLoading,
   makeSelectError,
   makeSelectId,

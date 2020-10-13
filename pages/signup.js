@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import { Container, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import * as PasswordValidator from 'password-validator';
 import * as EmailValidator from 'email-validator';
@@ -15,7 +14,6 @@ import {
   setEmailAction,
 } from '../src/redux/signup/actions';
 import {
-  makeSelectResult,
   makeSelectId,
   makeSelectPassword,
   makeSelectName,
@@ -32,8 +30,6 @@ const Signup = () => {
   const [focusName, setFocusName] = useState(false);
   const [focusEmail, setFocusEmail] = useState(false);
   const [errors, setErrors] = useState({});
-
-  const router = useRouter();
 
   const dispatch = useDispatch();
   const setId = id => {
@@ -58,7 +54,6 @@ const Signup = () => {
     dispatch(sendFormAction(formData));
   };
 
-  const result = useSelector(makeSelectResult());
   const id = useSelector(makeSelectId());
   const password = useSelector(makeSelectPassword());
   const name = useSelector(makeSelectName());
@@ -185,13 +180,6 @@ const Signup = () => {
       }
     }
   }, [focusEmail, email]);
-
-  useEffect(() => {
-    if (result) {
-      alert('가입완료');
-      router.push('/');
-    }
-  }, [result]);
 
   const handleSubmit = e => {
     if (!focusId || errors.id !== null) {
