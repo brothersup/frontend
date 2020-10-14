@@ -12,12 +12,12 @@ import {
   CHECK_NAME_SUCCESS,
   CHECK_NAME_ERROR,
   SET_EMAIL,
+  RESET_FORM,
 } from './constants';
 
-export function sendFormAction(formData) {
+export function sendFormAction() {
   return {
     type: SEND_FORM,
-    formData,
   };
 }
 
@@ -99,5 +99,11 @@ export function setEmailAction(email) {
   return {
     type: SET_EMAIL,
     email,
+  };
+}
+
+export function resetFormAction() {
+  return {
+    type: RESET_FORM,
   };
 }

@@ -9,11 +9,15 @@ import {
   checkNameSuccessAction,
   checkNameErrorAction,
 } from './actions';
-import { makeSelectFormData, makeSelectId, makeSelectName } from './selectors';
+import { makeSelectId, makeSelectPassword, makeSelectName, makeSelectEmail } from './selectors';
 import { sendFormRequest, checkIdRequest, checkNameRequest } from './requests';
 
 function* sendForm() {
-  const formData = yield select(makeSelectFormData());
+  const id = yield select(makeSelectId());
+  const password = yield select(makeSelectPassword());
+  const name = yield select(makeSelectName());
+  const email = yield select(makeSelectEmail());
+  const formData = { id, password, name, email };
 
   try {
     const res = yield call(sendFormRequest, formData);

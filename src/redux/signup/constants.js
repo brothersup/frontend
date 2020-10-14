@@ -15,3 +15,5 @@ export const CHECK_NAME_SUCCESS = 'signup/CHECK_NAME_SUCCESS';
 export const CHECK_NAME_ERROR = 'signup/CHECK_NAME_ERROR';
 
 export const SET_EMAIL = 'signup/SET_EMAIL';
+
+export const RESET_FORM = 'signup/RESET_FORM';

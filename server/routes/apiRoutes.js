@@ -1,39 +1,45 @@
 const express = require('express');
 const router = express.Router();
 
-const { pool } = require('../config/db');
-const { decrypt, encrypt } = require('../encryption');
+const { encrypt } = require('../utils/encryption');
 
-router.post('/signup', (req, res) => {
+const loginService = require('../service/LoginService');
+const userService = require('../service/UserService');
+
+router.post('/signup', async (req, res) => {
   const { id, password, name, email } = req.body.formData;
 
   const encryptedPassword = encrypt(password);
 
-  pool.query(
-    `INSERT INTO user(id, password, name, email) VALUES('${id}', '${encryptedPassword}', '${name}', '${email}')`,
-    (error, results, fields) => {
-      // TODO: error 처리 해야됨.
-      if (error) throw error;
-      return res.json({ result: true });
-    },
-  );
-  // return res.json({ response: true });
+  await userService.insertUser({ id, password: encryptedPassword, name, email });
+  return res.json({ result: true });
 });
 
-router.get('/check_id/:id', (req, res) => {
+router.get('/check_id/:id', async (req, res) => {
   const { id } = req.params;
-  pool.query('SELECT id FROM user WHERE id=?', id, (error, results, fields) => {
-    if (error) throw error;
-    return res.json({ response: results.length === 0 });
-  });
+  const user = await userService.findUserById(id);
+  return res.json({ response: user === null });
 });
 
-router.get('/check_name/:name', (req, res) => {
+router.get('/check_name/:name', async (req, res) => {
   const { name } = req.params;
-  pool.query('SELECT name FROM user WHERE name=?', name, (error, results, fields) => {
-    if (error) throw error;
-    return res.json({ response: results.length === 0 });
-  });
+  const user = await userService.findUserByName(name);
+  return res.json({ response: user === null });
+});
+
+router.post('/signin', async (req, res) => {
+  const { id, password } = req.body.formData;
+  const token = await loginService.getToken(id, password);
+  if (!token) {
+    return res.send({ message: 'fail' });
+  }
+  return res.send({ message: 'success', token });
+});
+
+router.post('/auth/verify', (req, res) => {
+  const verify = loginService.verifyToken(req.headers.authorization);
+  console.log(verify);
+  return res.send({ verify });
 });
 
 module.exports = router;

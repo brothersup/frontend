@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import * as PasswordValidator from 'password-validator';
 import * as EmailValidator from 'email-validator';
+import Layout from '../components/layout';
 
 import {
   sendFormAction,
@@ -12,6 +13,7 @@ import {
   setNameAction,
   checkNameAction,
   setEmailAction,
+  resetFormAction,
 } from '../src/redux/signup/actions';
 import {
   makeSelectId,
@@ -50,8 +52,18 @@ const Signup = () => {
   const setEmail = email => {
     dispatch(setEmailAction(email));
   };
-  const sendForm = formData => {
-    dispatch(sendFormAction(formData));
+  const sendForm = () => {
+    dispatch(sendFormAction());
+  };
+  const resetForm = () => {
+    setFocusId(false);
+    setFocusPassword(false);
+    setPasswordConfirm('');
+    setFocusPasswordConfirm(false);
+    setFocusName(false);
+    setFocusEmail(false);
+    setErrors({});
+    dispatch(resetFormAction());
   };
 
   const id = useSelector(makeSelectId());
@@ -60,6 +72,10 @@ const Signup = () => {
   const email = useSelector(makeSelectEmail());
   const availableId = useSelector(makeSelectAvailableId());
   const availableName = useSelector(makeSelectAvailableName());
+
+  useEffect(() => {
+    resetForm();
+  }, []);
 
   useEffect(() => {
     if (focusId) {
@@ -193,18 +209,13 @@ const Signup = () => {
     } else if (!focusEmail || errors.email !== null) {
       document.getElementById('email').focus();
     } else {
-      sendForm({
-        id,
-        password,
-        name,
-        email,
-      });
+      sendForm();
     }
     e.preventDefault();
   };
 
   return (
-    <Container>
+    <Layout>
       <Form method="post" onSubmit={handleSubmit}>
         <FormGroup>
           <FormLabel>아이디</FormLabel>
@@ -281,9 +292,14 @@ const Signup = () => {
           />
           {errors.email && <p>{errors.email.message}</p>}
         </FormGroup>
-        <Button type="submit">submit</Button>
+        <Button type="button" onClick={resetForm}>
+          reset
+        </Button>
+        <Button type="submit" style={{ marginLeft: '10px' }}>
+          submit
+        </Button>
       </Form>
-    </Container>
+    </Layout>
   );
 };
 

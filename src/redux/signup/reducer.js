@@ -13,10 +13,10 @@ import {
   CHECK_NAME_SUCCESS,
   CHECK_NAME_ERROR,
   SET_EMAIL,
+  RESET_FORM,
 } from './constants';
 
 export const initialState = {
-  formData: {},
   loading: false,
   error: false,
   id: '',
@@ -32,7 +32,6 @@ const signupReducer = (state = initialState, action) =>
     switch (action.type) {
       case SEND_FORM:
         draft.loading = true;
-        draft.formData = action.formData;
         break;
       case SEND_FORM_SUCCESS:
         draft.loading = false;
@@ -68,6 +67,14 @@ const signupReducer = (state = initialState, action) =>
         break;
       case SET_EMAIL:
         draft.email = action.email;
+        break;
+      case RESET_FORM:
+        draft.id = '';
+        draft.name = '';
+        draft.password = '';
+        draft.email = '';
+        draft.availableId = false;
+        draft.availableName = false;
         break;
     }
   });
