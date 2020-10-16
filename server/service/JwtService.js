@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../src/config/jwt');
 
+// TODO: refresh token 공부해서 추가하기.
+// https://swalloow.github.io/implement-jwt/ => 참고
+
 class JwtService {
   create(user) {
     const token = jwt.sign(
@@ -12,7 +15,7 @@ class JwtService {
       config.secret,
       {
         // expiresIn: '1d',
-        expiresIn: '1m',
+        expiresIn: '2h',
         issuer: 'brothersup',
         subject: 'userInfo',
       },

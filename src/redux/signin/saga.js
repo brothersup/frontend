@@ -13,8 +13,17 @@ function* sendForm() {
   try {
     const res = yield call(sendFormRequest, formData);
     if (res.data.token) {
+      if (localStorage.getItem('token')) {
+        localStorage.removeItem('token');
+      }
       localStorage.setItem('token', res.data.token);
-      Router.push('/');
+      const previousPage = sessionStorage.getItem('previousPage');
+      if (previousPage) {
+        Router.push(previousPage);
+      } else {
+        Router.push('/');
+      }
+      // Router.back();
     }
     yield put(sendFormSuccessAction(res.data));
   } catch (error) {

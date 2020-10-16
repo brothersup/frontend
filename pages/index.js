@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import Layout from '../components/layout';
-import { verifyToken } from '../src/utils';
+import { AuthContext } from '../src/utils/authProvider';
 
 const Home = () => {
-  const [logon, setLogon] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setLogon(token !== null);
-  }, [logon]);
+  const { token, isValid } = useContext(AuthContext);
 
   const verify = () => {
-    const validToken = verifyToken(localStorage.getItem('token'));
-    console.log(validToken);
+    console.log(isValid);
   };
 
   return (
     <Layout>
       <div>
-        {logon && (
+        {token && isValid && (
           <Button type="button" onClick={verify}>
             verify token
           </Button>

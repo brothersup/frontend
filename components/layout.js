@@ -6,6 +6,7 @@ import Header from './header';
 const Layout = ({ children }) => (
   <>
     <Header />
+    <div style={{ marginTop: '60px' }} />
     <Container>{children}</Container>
   </>
 );

@@ -36,6 +36,7 @@ router.post('/signin', async (req, res) => {
   return res.send({ message: 'success', token });
 });
 
+// TODO: 테스트용이었어서 확인 후 지울예정
 router.post('/auth/verify', (req, res) => {
   const verify = loginService.verifyToken(req.headers.authorization);
   console.log(verify);

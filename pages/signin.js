@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Router from 'next/router';
+import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormGroup, FormLabel, FormControl, Button } from 'react-bootstrap';
 import { setIdAction, setPasswordAction, sendFormAction } from '../src/redux/signin/actions';
 import { makeSelectId, makeSelectPassword, makeSelectResult } from '../src/redux/signin/selectors';
 import Layout from '../components/layout';
-import { getToken, verifyToken } from '../src/utils';
+import { AuthContext } from '../src/utils/authProvider';
 
 const Signin = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const { token, isValid } = useContext(AuthContext);
 
   const dispatch = useDispatch();
   const setId = id => {
@@ -26,15 +28,18 @@ const Signin = () => {
   const result = useSelector(makeSelectResult());
 
   useEffect(() => {
-    const token = getToken();
-    if (token && verifyToken(token)) {
-      Router.push('/');
+    if (token && isValid) {
+      if (sessionStorage.getItem('previousPage') === null) {
+        Router.push('/');
+      } else {
+        Router.push(sessionStorage.getItem('previousPage'));
+      }
     }
   }, []);
 
   useEffect(() => {
     if (result.message === 'fail') {
-      setErrorMessage('회원정보가 없습니다. 아이디나 비밀번호를 확인해주세요.');
+      setErrorMessage('아이디나 비밀번호를 확인해주세요.');
     } else {
       setErrorMessage(null);
     }
@@ -82,6 +87,7 @@ const Signin = () => {
         </FormGroup>
         {errorMessage && <p>{errorMessage}</p>}
         <Button type="submit">sign in</Button>
+        <Link href="/">id 찾기</Link> | <Link href="/">비밀번호 찾기</Link>
       </Form>
     </Layout>
   );
