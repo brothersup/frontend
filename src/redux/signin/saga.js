@@ -1,5 +1,4 @@
 import { call, select, put, takeLatest } from 'redux-saga/effects';
-import Router from 'next/router';
 import { SEND_FORM } from './constants';
 import { sendFormSuccessAction, sendFormErrorAction } from './actions';
 import { makeSelectId, makeSelectPassword } from './selectors';
@@ -17,13 +16,6 @@ function* sendForm() {
         localStorage.removeItem('token');
       }
       localStorage.setItem('token', res.data.token);
-      const previousPage = sessionStorage.getItem('previousPage');
-      if (previousPage) {
-        Router.push(previousPage);
-      } else {
-        Router.push('/');
-      }
-      // Router.back();
     }
     yield put(sendFormSuccessAction(res.data));
   } catch (error) {

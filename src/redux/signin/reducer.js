@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { SET_ID, SET_PASSWORD, SEND_FORM, SEND_FORM_SUCCESS, SEND_FORM_ERROR } from './constants';
+import { SET_ID, SET_PASSWORD, SEND_FORM, SEND_FORM_SUCCESS, SEND_FORM_ERROR, RESET_RESULT } from './constants';
 
 export const initialState = {
   loading: false,
@@ -28,6 +28,9 @@ const signinReducer = (state = initialState, action) =>
       case SEND_FORM_ERROR:
         draft.loading = false;
         draft.error = action.error;
+        break;
+      case RESET_RESULT:
+        draft.result = {};
         break;
     }
   });

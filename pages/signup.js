@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import * as PasswordValidator from 'password-validator';
 import * as EmailValidator from 'email-validator';
 import Layout from '../components/layout';
+import { AuthContext } from '../src/utils/authProvider';
 
 import {
   sendFormAction,
@@ -32,6 +34,8 @@ const Signup = () => {
   const [focusName, setFocusName] = useState(false);
   const [focusEmail, setFocusEmail] = useState(false);
   const [errors, setErrors] = useState({});
+  const { token, isValid } = useContext(AuthContext);
+  const router = useRouter();
 
   const dispatch = useDispatch();
   const setId = id => {
@@ -74,6 +78,9 @@ const Signup = () => {
   const availableName = useSelector(makeSelectAvailableName());
 
   useEffect(() => {
+    if (token && isValid) {
+      router.push('/');
+    }
     resetForm();
   }, []);
 
@@ -216,89 +223,93 @@ const Signup = () => {
 
   return (
     <Layout>
-      <Form method="post" onSubmit={handleSubmit}>
-        <FormGroup>
-          <FormLabel>아이디</FormLabel>
-          <FormControl
-            type="text"
-            id="id"
-            placeholder="enter your id"
-            onChange={e => {
-              setId(e.target.value);
-            }}
-            onFocus={() => {
-              setFocusId(true);
-            }}
-          />
-          {errors.id && <p>{errors.id.message}</p>}
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>비밀번호</FormLabel>
-          <FormControl
-            type="password"
-            id="password"
-            placeholder="enter your password"
-            onChange={e => {
-              setPassword(e.target.value);
-            }}
-            onFocus={() => {
-              setFocusPassword(true);
-            }}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>비밀번호 확인</FormLabel>
-          <FormControl
-            type="password"
-            id="passwordConfirm"
-            placeholder="enter your password"
-            onChange={e => {
-              setPasswordConfirm(e.target.value);
-            }}
-            onFocus={() => {
-              setFocusPasswordConfirm(true);
-            }}
-          />
-          {errors.passwordConfirm && <p>{errors.passwordConfirm.message}</p>}
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>이름</FormLabel>
-          <FormControl
-            type="text"
-            id="name"
-            placeholder="enter your name"
-            onChange={e => {
-              setName(e.target.value);
-            }}
-            onFocus={() => {
-              setFocusName(true);
-            }}
-          />
-          {errors.name && <p>{errors.name.message}</p>}
-        </FormGroup>
-        <FormGroup>
-          <FormLabel>이메일</FormLabel>
-          <FormControl
-            type="email"
-            id="email"
-            placeholder="enter your email address"
-            onChange={e => {
-              setEmail(e.target.value);
-            }}
-            onFocus={() => {
-              setFocusEmail(true);
-            }}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </FormGroup>
-        <Button type="button" onClick={resetForm}>
-          reset
-        </Button>
-        <Button type="submit" style={{ marginLeft: '10px' }}>
-          submit
-        </Button>
-      </Form>
+      <>
+        {(token === null || !isValid) && (
+          <Form method="post" onSubmit={handleSubmit}>
+            <FormGroup>
+              <FormLabel>아이디</FormLabel>
+              <FormControl
+                type="text"
+                id="id"
+                placeholder="enter your id"
+                onChange={e => {
+                  setId(e.target.value);
+                }}
+                onFocus={() => {
+                  setFocusId(true);
+                }}
+              />
+              {errors.id && <p>{errors.id.message}</p>}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>비밀번호</FormLabel>
+              <FormControl
+                type="password"
+                id="password"
+                placeholder="enter your password"
+                onChange={e => {
+                  setPassword(e.target.value);
+                }}
+                onFocus={() => {
+                  setFocusPassword(true);
+                }}
+              />
+              {errors.password && <p>{errors.password.message}</p>}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>비밀번호 확인</FormLabel>
+              <FormControl
+                type="password"
+                id="passwordConfirm"
+                placeholder="enter your password"
+                onChange={e => {
+                  setPasswordConfirm(e.target.value);
+                }}
+                onFocus={() => {
+                  setFocusPasswordConfirm(true);
+                }}
+              />
+              {errors.passwordConfirm && <p>{errors.passwordConfirm.message}</p>}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>이름</FormLabel>
+              <FormControl
+                type="text"
+                id="name"
+                placeholder="enter your name"
+                onChange={e => {
+                  setName(e.target.value);
+                }}
+                onFocus={() => {
+                  setFocusName(true);
+                }}
+              />
+              {errors.name && <p>{errors.name.message}</p>}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>이메일</FormLabel>
+              <FormControl
+                type="email"
+                id="email"
+                placeholder="enter your email address"
+                onChange={e => {
+                  setEmail(e.target.value);
+                }}
+                onFocus={() => {
+                  setFocusEmail(true);
+                }}
+              />
+              {errors.email && <p>{errors.email.message}</p>}
+            </FormGroup>
+            <Button type="button" onClick={resetForm}>
+              reset
+            </Button>
+            <Button type="submit" style={{ marginLeft: '10px' }}>
+              submit
+            </Button>
+          </Form>
+        )}
+      </>
     </Layout>
   );
 };

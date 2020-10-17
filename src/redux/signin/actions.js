@@ -1,4 +1,4 @@
-import { SET_ID, SET_PASSWORD, SEND_FORM, SEND_FORM_SUCCESS, SEND_FORM_ERROR } from './constants';
+import { SET_ID, SET_PASSWORD, SEND_FORM, SEND_FORM_SUCCESS, SEND_FORM_ERROR, RESET_RESULT } from './constants';
 
 export function setIdAction(id) {
   return {
@@ -31,5 +31,11 @@ export function sendFormErrorAction(error) {
   return {
     type: SEND_FORM_ERROR,
     error,
+  };
+}
+
+export function resetResultAction() {
+  return {
+    type: RESET_RESULT,
   };
 }

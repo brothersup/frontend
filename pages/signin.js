@@ -3,14 +3,16 @@ import Router from 'next/router';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormGroup, FormLabel, FormControl, Button } from 'react-bootstrap';
-import { setIdAction, setPasswordAction, sendFormAction } from '../src/redux/signin/actions';
+import { setIdAction, setPasswordAction, sendFormAction, resetResultAction } from '../src/redux/signin/actions';
 import { makeSelectId, makeSelectPassword, makeSelectResult } from '../src/redux/signin/selectors';
 import Layout from '../components/layout';
 import { AuthContext } from '../src/utils/authProvider';
+import { HistoryContext } from '../src/utils/historyProvider';
 
 const Signin = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const { token, isValid } = useContext(AuthContext);
+  const { previousPage } = useContext(HistoryContext);
 
   const dispatch = useDispatch();
   const setId = id => {
@@ -22,6 +24,9 @@ const Signin = () => {
   const sendForm = () => {
     dispatch(sendFormAction());
   };
+  const resetResult = () => {
+    dispatch(resetResultAction());
+  };
 
   const id = useSelector(makeSelectId());
   const password = useSelector(makeSelectPassword());
@@ -29,20 +34,24 @@ const Signin = () => {
 
   useEffect(() => {
     if (token && isValid) {
-      if (sessionStorage.getItem('previousPage') === null) {
+      if (previousPage === null) {
         Router.push('/');
       } else {
-        Router.push(sessionStorage.getItem('previousPage'));
+        Router.push(previousPage);
+      }
+    } else if (result.message === 'fail') {
+      setErrorMessage('아이디나 비밀번호를 확인해주세요.');
+    } else if (result.message === 'success') {
+      if (previousPage === null) {
+        Router.push('/');
+      } else {
+        Router.push(previousPage);
       }
     }
-  }, []);
 
-  useEffect(() => {
-    if (result.message === 'fail') {
-      setErrorMessage('아이디나 비밀번호를 확인해주세요.');
-    } else {
-      setErrorMessage(null);
-    }
+    return () => {
+      resetResult();
+    };
   }, [result]);
 
   const handleSubmit = e => {
