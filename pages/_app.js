@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import Router from 'next/router';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ToastContainer, Slide } from 'react-toastify';
 import { wrapper } from '../src/config/store';
@@ -10,15 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 function App({ Component, pageProps }) {
-  useEffect(() => {
-    // Router.events.on('routeChangeStart', () => {
-    //   const currentPage = `${window.location.pathname}${window.location.search}`;
-    //   if (currentPage !== '/signup' && currentPage !== '/signin') {
-    //     sessionStorage.setItem('previousPage', `${window.location.pathname}${window.location.search}`);
-    //   }
-    // });
-  }, []);
-
   return (
     <AuthProvider>
       <HistoryProvider>

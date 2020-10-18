@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormGroup, FormLabel, FormControl, Button } from 'react-bootstrap';
 import { setIdAction, setPasswordAction, sendFormAction, resetResultAction } from '../src/redux/signin/actions';
-import { makeSelectId, makeSelectPassword, makeSelectResult } from '../src/redux/signin/selectors';
+import { makeSelectId, makeSelectPassword, makeSelectResult, makeSelectLoading } from '../src/redux/signin/selectors';
 import Layout from '../components/layout';
 import { AuthContext } from '../src/utils/authProvider';
 import { HistoryContext } from '../src/utils/historyProvider';
@@ -31,6 +31,7 @@ const Signin = () => {
   const id = useSelector(makeSelectId());
   const password = useSelector(makeSelectPassword());
   const result = useSelector(makeSelectResult());
+  const loading = useSelector(makeSelectLoading());
 
   useEffect(() => {
     if (token && isValid) {
@@ -95,7 +96,9 @@ const Signin = () => {
           />
         </FormGroup>
         {errorMessage && <p>{errorMessage}</p>}
-        <Button type="submit">sign in</Button>
+        <Button type="submit" disabled={loading}>
+          sign in
+        </Button>
         <Link href="/">id 찾기</Link> | <Link href="/">비밀번호 찾기</Link>
       </Form>
     </Layout>

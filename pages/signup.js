@@ -24,6 +24,7 @@ import {
   makeSelectEmail,
   makeSelectAvailableId,
   makeSelectAvailableName,
+  makeSelectLoading,
 } from '../src/redux/signup/selectors';
 
 const Signup = () => {
@@ -60,13 +61,6 @@ const Signup = () => {
     dispatch(sendFormAction());
   };
   const resetForm = () => {
-    setFocusId(false);
-    setFocusPassword(false);
-    setPasswordConfirm('');
-    setFocusPasswordConfirm(false);
-    setFocusName(false);
-    setFocusEmail(false);
-    setErrors({});
     dispatch(resetFormAction());
   };
 
@@ -76,6 +70,7 @@ const Signup = () => {
   const email = useSelector(makeSelectEmail());
   const availableId = useSelector(makeSelectAvailableId());
   const availableName = useSelector(makeSelectAvailableName());
+  const loading = useSelector(makeSelectLoading());
 
   useEffect(() => {
     if (token && isValid) {
@@ -301,10 +296,22 @@ const Signup = () => {
               />
               {errors.email && <p>{errors.email.message}</p>}
             </FormGroup>
-            <Button type="button" onClick={resetForm}>
+            <Button
+              type="reset"
+              onClick={() => {
+                setFocusId(false);
+                setFocusPassword(false);
+                setPasswordConfirm('');
+                setFocusPasswordConfirm(false);
+                setFocusName(false);
+                setFocusEmail(false);
+                setErrors({});
+                resetForm();
+              }}
+            >
               reset
             </Button>
-            <Button type="submit" style={{ marginLeft: '10px' }}>
+            <Button type="submit" style={{ marginLeft: '10px' }} disabled={loading}>
               submit
             </Button>
           </Form>

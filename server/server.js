@@ -3,7 +3,17 @@ const next = require('next');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 
-dotenv.config();
+let path;
+switch (process.env.NODE_ENV) {
+  case 'production':
+    path = `${__dirname}/../.env.prod`;
+    break;
+  default:
+    path = `${__dirname}/../.env.dev`;
+    break;
+}
+
+dotenv.config({ path });
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';

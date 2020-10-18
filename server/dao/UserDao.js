@@ -1,5 +1,4 @@
 const { pool } = require('../../src/config/db');
-require('dotenv').config();
 
 class UserDao {
   async findUserById(id) {
