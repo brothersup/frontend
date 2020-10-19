@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { AuthContext } from '../src/utils/authProvider';
@@ -10,7 +11,7 @@ import { makeSelectBoardList, makeSelectLoading, makeSelectTotal } from '../src/
 const FreeBoard = () => {
   const { token, isValid } = useContext(AuthContext);
   const [board, setBoard] = useState(null);
-
+  const router = useRouter();
   const dispatch = useDispatch();
   const getBoardList = () => {
     dispatch(getBoardListAction());
@@ -50,7 +51,21 @@ const FreeBoard = () => {
 
   return (
     <Layout>
-      <div>{token && isValid && <Button>글쓰기</Button>}</div>
+      <div>
+        {token && isValid && (
+          <Button
+            onClick={() => {
+              if (token && isValid) {
+                router.push('/writeForm');
+              } else {
+                router.push('/signin');
+              }
+            }}
+          >
+            글쓰기
+          </Button>
+        )}
+      </div>
       <hr />
       <div>
         {board && board.length > 0 ? (

@@ -7,6 +7,7 @@ import HistoryProvider from '../src/utils/historyProvider';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-quill/dist/quill.snow.css';
 
 function App({ Component, pageProps }) {
   return (

@@ -5,6 +5,7 @@ const { encrypt } = require('../utils/encryption');
 
 const loginService = require('../service/LoginService');
 const userService = require('../service/UserService');
+const freeBoardService = require('../service/FreeBoardService');
 
 router.post('/signup', async (req, res) => {
   const { id, password, name, email } = req.body.formData;
@@ -41,6 +42,17 @@ router.post('/auth/verify', (req, res) => {
   const verify = loginService.verifyToken(req.headers.authorization);
   console.log(verify);
   return res.send({ verify });
+});
+
+router.get('/free_board_list/:beginIndex/:size', async (req, res) => {
+  const { beginIndex, size } = req.params;
+  const total = await freeBoardService.count();
+  const list = await freeBoardService.getBoardList(beginIndex, size);
+
+  return res.send({
+    list,
+    total,
+  });
 });
 
 module.exports = router;
